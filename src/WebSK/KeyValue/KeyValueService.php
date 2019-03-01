@@ -48,6 +48,27 @@ class KeyValueService extends EntityService
 
     /**
      * @param string $key
+     * @param string $value
+     * @param string|null $decription
+     * @throws \Exception
+     */
+    public function setValueForKey(string $key, string $value, ?string $decription = null): void
+    {
+        $key_value_id = $this->repository->findIdByKey($key);
+        $key_value_obj = new KeyValue();
+        $key_value_obj->setName($key);
+        if ($key_value_id) {
+            $key_value_obj = $this->getById($key_value_id);
+        }
+        $key_value_obj->setValue($value);
+        if (!is_null($decription)) {
+            $key_value_obj->setDescription($decription);
+        }
+
+        $this->save($key_value_obj);
+    }
+    /**
+     * @param string $key
      * @return string
      */
     protected function getOptionalValueForKeyCacheKey(string $key)
@@ -60,6 +81,10 @@ class KeyValueService extends EntityService
      */
     public function beforeSave(InterfaceEntity $key_value_obj)
     {
+        if (is_null($key_value_obj->getId())) {
+            return;
+        }
+
         // Сбрасываем кеш перед сохранением объекта для старого значения имени ключа (если вдруг имя ключа поменяется)
         $existing_key_value_obj = $this->getById($key_value_obj->getId());
 

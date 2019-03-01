@@ -20,11 +20,11 @@ class KeyValue extends Entity
 
     const _DESCRIPTION = 'description';
     /** @var string */
-    protected $description;
+    protected $description = '';
 
     const _VALUE = 'value';
     /** @var string */
-    protected $value = "";
+    protected $value = '';
 
     /**
      * @return string
