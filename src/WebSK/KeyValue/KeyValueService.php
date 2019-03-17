@@ -6,6 +6,7 @@ use WebSK\Auth\Auth;
 use WebSK\Entity\EntityService;
 use WebSK\Entity\InterfaceEntity;
 use WebSK\Logger\Logger;
+use WebSK\Utils\FullObjectId;
 
 /**
  * Class KeyValueService
@@ -105,7 +106,7 @@ class KeyValueService extends EntityService
         Logger::logObjectEvent(
             $key_value_obj,
             'save',
-            Auth::getCurrentUserId()
+            FullObjectId::getFullObjectId(Auth::getCurrentUserObj())
         );
     }
 
@@ -122,7 +123,7 @@ class KeyValueService extends EntityService
         Logger::logObjectEvent(
             $key_value_obj,
             'delete',
-            Auth::getCurrentUserId()
+            FullObjectId::getFullObjectId(Auth::getCurrentUserObj())
         );
     }
 }

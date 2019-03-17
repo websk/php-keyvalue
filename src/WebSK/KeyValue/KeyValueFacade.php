@@ -2,7 +2,7 @@
 
 namespace WebSK\KeyValue;
 
-use Websk\Slim\Facade;
+use WebSK\Slim\Facade;
 
 /**
  * Class KeyValueFacade
