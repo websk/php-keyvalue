@@ -5,7 +5,8 @@ namespace WebSK\KeyValue\RequestHandlers;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use WebSK\Config\ConfWrapper;
+use WebSK\KeyValue\KeyValueConfig;
+use WebSK\KeyValue\KeyValueRoutes;
 use WebSK\Views\LayoutDTO;
 use WebSK\Slim\RequestHandlers\BaseHandler;
 use WebSK\Utils\HTTP;
@@ -16,7 +17,6 @@ use WebSK\CRUD\Form\CRUDFormRow;
 use WebSK\CRUD\Form\Widgets\CRUDFormWidgetInput;
 use WebSK\CRUD\Form\Widgets\CRUDFormWidgetTextarea;
 use WebSK\KeyValue\KeyValue;
-use WebSK\KeyValue\KeyValueRoutes;
 use WebSK\KeyValue\KeyValueServiceProvider;
 use WebSK\Logger\LoggerRender;
 use WebSK\Views\PhpRender;
@@ -60,15 +60,15 @@ class KeyValueEditHandler extends BaseHandler
         $layout_dto->setContentHtml($crud_table_obj->html());
 
         $layout_dto->setNavTabsDtoArr([
-            new NavTabItemDTO('Редактирование', $this->pathFor(KeyValueEditHandler::class, ['keyvalue_id' => $keyvalue_id])),
+            new NavTabItemDTO('Редактирование', $this->pathFor(KeyValueRoutes::ROUTE_NAME_ADMIN_KEYVALUE_EDIT, ['keyvalue_id' => $keyvalue_id])),
             new NavTabItemDTO('Журнал', LoggerRender::getLoggerLinkForEntityObj($keyvalue_obj), '_blank'),
         ]);
 
         $layout_dto->setBreadcrumbsDtoArr([
-            new BreadcrumbItemDTO('Главная', KeyValueRoutes::ADMIN_ROOT_PATH),
-            new BreadcrumbItemDTO('Параметры', $this->pathFor(KeyValueListHandler::class))
+            new BreadcrumbItemDTO('Главная', KeyValueConfig::getSkifMainPageUrl()),
+            new BreadcrumbItemDTO('Параметры', $this->pathFor(KeyValueRoutes::ROUTE_NAME_ADMIN_KEYVALUE_LIST))
         ]);
 
-        return PhpRender::renderLayout($response, ConfWrapper::value('layout.admin'), $layout_dto);
+        return PhpRender::renderLayout($response, KeyValueConfig::getSkifLayout(), $layout_dto);
     }
 }

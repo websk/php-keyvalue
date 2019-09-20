@@ -5,7 +5,8 @@ namespace WebSK\KeyValue\RequestHandlers;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use WebSK\Config\ConfWrapper;
+use WebSK\KeyValue\KeyValueConfig;
+use WebSK\KeyValue\KeyValueRoutes;
 use WebSK\Slim\RequestHandlers\BaseHandler;
 use WebSK\Views\LayoutDTO;
 use WebSK\Views\BreadcrumbItemDTO;
@@ -18,7 +19,6 @@ use WebSK\CRUD\Table\Widgets\CRUDTableWidgetDelete;
 use WebSK\CRUD\Table\Widgets\CRUDTableWidgetText;
 use WebSK\CRUD\Table\Widgets\CRUDTableWidgetTextWithLink;
 use WebSK\KeyValue\KeyValue;
-use WebSK\KeyValue\KeyValueRoutes;
 use WebSK\Views\PhpRender;
 
 /**
@@ -48,14 +48,16 @@ class KeyValueListHandler extends BaseHandler
                 new CRUDTableColumn(
                     'Название',
                     new CRUDTableWidgetTextWithLink(
-                        '{this->' . KeyValue::_NAME . '}',
-                        $this->pathFor(KeyValueEditHandler::class, ['keyvalue_id' => '{this->' . KeyValue::_ID . '}'])
+                        KeyValue::_NAME,
+                        function (KeyValue $key_value) {
+                            return $this->pathFor(KeyValueRoutes::ROUTE_NAME_ADMIN_KEYVALUE_EDIT, ['keyvalue_id' => $key_value->getId()]);
+                        }
                     )
                 ),
                 new CRUDTableColumn(
                     'Описание',
                     new CRUDTableWidgetText(
-                        '{this->' . KeyValue::_DESCRIPTION . '}'
+                        KeyValue::_DESCRIPTION
                     )
                 ),
                 new CRUDTableColumn('', new CRUDTableWidgetDelete())
@@ -72,11 +74,11 @@ class KeyValueListHandler extends BaseHandler
         $layout_dto->setContentHtml($crud_table_obj->html($request));
 
         $breadcrumbs_arr = [
-            new BreadcrumbItemDTO('Главная', KeyValueRoutes::ADMIN_ROOT_PATH),
+            new BreadcrumbItemDTO('Главная', KeyValueConfig::getSkifMainPageUrl()),
 
         ];
         $layout_dto->setBreadcrumbsDtoArr($breadcrumbs_arr);
 
-        return PhpRender::renderLayout($response, ConfWrapper::value('layout.admin'), $layout_dto);
+        return PhpRender::renderLayout($response, KeyValueConfig::getSkifLayout(), $layout_dto);
     }
 }

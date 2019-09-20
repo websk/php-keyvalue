@@ -67,4 +67,13 @@ class KeyValueServiceProvider
     {
         return $container[KeyValue::ENTITY_SERVICE_CONTAINER_ID];
     }
+
+    /**
+     * @param ContainerInterface $container
+     * @return DBService
+     */
+    public static function getDbService(ContainerInterface $container): DBService
+    {
+        return $container[self::DB_SERVICE_CONTAINER_ID];
+    }
 }
