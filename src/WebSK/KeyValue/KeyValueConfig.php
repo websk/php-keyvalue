@@ -14,16 +14,16 @@ class KeyValueConfig
     /**
      * @return string
      */
-    public static function getLayout(): string
+    public static function getAdminLayout(): string
     {
-        return ConfWrapper::value('keyvalue.layout',  ConfWrapper::value('layout.admin'));
+        return ConfWrapper::value('keyvalue.layout_admin',  ConfWrapper::value('layout.admin'));
     }
 
     /**
      * @return string
      */
-    public static function getMainPageUrl(): string
+    public static function getAdminMainPageUrl(): string
     {
-        return ConfWrapper::value('keyvalue.main_page_url',  '');
+        return ConfWrapper::value('keyvalue.admin_main_page_url',  '/admin');
     }
 }

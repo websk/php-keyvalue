@@ -75,11 +75,11 @@ class KeyValueListHandler extends BaseHandler
         $layout_dto->setContentHtml($crud_table_obj->html($request));
 
         $breadcrumbs_arr = [
-            new BreadcrumbItemDTO('Главная', KeyValueConfig::getMainPageUrl()),
+            new BreadcrumbItemDTO('Главная', KeyValueConfig::getAdminMainPageUrl()),
 
         ];
         $layout_dto->setBreadcrumbsDtoArr($breadcrumbs_arr);
 
-        return PhpRender::renderLayout($response, KeyValueConfig::getLayout(), $layout_dto);
+        return PhpRender::renderLayout($response, KeyValueConfig::getAdminLayout(), $layout_dto);
     }
 }

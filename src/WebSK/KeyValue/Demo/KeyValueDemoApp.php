@@ -1,6 +1,6 @@
 <?php
 
-namespace WebSK\KeyValue;
+namespace WebSK\KeyValue\Demo;
 
 use Slim\App;
 use Slim\Handlers\Strategies\RequestResponseArgs;
@@ -11,6 +11,9 @@ use WebSK\Auth\User\UserServiceProvider;
 use WebSK\Cache\CacheServiceProvider;
 use WebSK\CRUD\CRUDServiceProvider;
 use WebSK\DB\DBWrapper;
+use WebSK\KeyValue\KeyValueConfig;
+use WebSK\KeyValue\KeyValueRoutes;
+use WebSK\KeyValue\KeyValueServiceProvider;
 use WebSK\Logger\LoggerRoutes;
 use WebSK\Logger\LoggerServiceProvider;
 use WebSK\Slim\Facade;
@@ -18,7 +21,7 @@ use WebSK\Slim\Router;
 
 /**
  * Class KeyValueDemoApp
- * @package WebSK\Auth
+ * @package WebSK\KeyValue\Demo
  */
 class KeyValueDemoApp extends App
 {
@@ -54,7 +57,11 @@ class KeyValueDemoApp extends App
             return $response->withRedirect(Router::pathFor(KeyValueRoutes::ROUTE_NAME_ADMIN_KEYVALUE_LIST));
         });
 
-        $this->group(KeyValueConfig::getMainPageUrl(), function (App $app) {
+        $this->get(KeyValueConfig::getAdminMainPageUrl(), function (Request $request, Response $response) {
+            return $response->withRedirect(Router::pathFor(KeyValueRoutes::ROUTE_NAME_ADMIN_KEYVALUE_LIST));
+        });
+
+        $this->group(KeyValueConfig::getAdminMainPageUrl(), function (App $app) {
             KeyValueRoutes::registerAdmin($app);
             LoggerRoutes::registerAdmin($app);
         });

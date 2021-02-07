@@ -41,8 +41,14 @@ return [
         'site_title' => 'WebSK. PHP KeyValue Demo',
         'site_email' => 'support@websk.ru',
         'keyvalue' => [
-            'layout' => '/var/www/php-keyvalue/views/layouts/layout.main.tpl.php',
-            'main_page_url' => '',
+            'layout_admin' => '/var/www/php-keyvalue/views/layouts/layout.main.tpl.php',
+            'admin_main_page_url' => '/admin',
         ],
+        'logger' => [
+            'layout_main' => '/var/www/php-logger/views/layouts/layout.main.tpl.php',
+            'layout_admin' => '/var/www/php-logger/views/layouts/layout.main.tpl.php',
+            'main_page_url' => '/',
+            'admin_main_page_url' => '/admin'
+        ]
     ],
 ];

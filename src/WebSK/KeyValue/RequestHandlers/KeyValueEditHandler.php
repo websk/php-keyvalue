@@ -65,10 +65,10 @@ class KeyValueEditHandler extends BaseHandler
         ]);
 
         $layout_dto->setBreadcrumbsDtoArr([
-            new BreadcrumbItemDTO('Главная', KeyValueConfig::getMainPageUrl()),
+            new BreadcrumbItemDTO('Главная', KeyValueConfig::getAdminMainPageUrl()),
             new BreadcrumbItemDTO('Параметры', $this->pathFor(KeyValueRoutes::ROUTE_NAME_ADMIN_KEYVALUE_LIST))
         ]);
 
-        return PhpRender::renderLayout($response, KeyValueConfig::getLayout(), $layout_dto);
+        return PhpRender::renderLayout($response, KeyValueConfig::getAdminLayout(), $layout_dto);
     }
 }

@@ -9,5 +9,5 @@ $config = require_once $config_path;
 
 ConfWrapper::setConfig($config['settings']);
 
-$app = new WebSK\KeyValue\KeyValueDemoApp($config);
+$app = new \WebSK\KeyValue\Demo\KeyValueDemoApp($config);
 $app->run();
