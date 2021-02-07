@@ -54,7 +54,7 @@ class KeyValueDemoApp extends App
             return $response->withRedirect(Router::pathFor(KeyValueRoutes::ROUTE_NAME_ADMIN_KEYVALUE_LIST));
         });
 
-        $this->group(KeyValueConfig::getSkifMainPageUrl(), function (App $app) {
+        $this->group(KeyValueConfig::getMainPageUrl(), function (App $app) {
             KeyValueRoutes::registerAdmin($app);
             LoggerRoutes::registerAdmin($app);
         });

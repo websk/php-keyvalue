@@ -8,11 +8,15 @@ use WebSK\Slim\Facade;
  * Class KeyValueFacade
  * @see KeyValueService
  * @method static getOptionalValueForKey(string $key, string $default_value = '')
+ * @method static setValueForKey(string $key, string $value, ?string $decription = null)
  * @package WebSK\KeyValue
  */
 class KeyValueFacade extends Facade
 {
-    protected static function getFacadeAccessor()
+    /**
+     * @return string
+     */
+    protected static function getFacadeAccessor(): string
     {
         return KeyValue::ENTITY_SERVICE_CONTAINER_ID;
     }

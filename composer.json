@@ -1,6 +1,7 @@
 {
   "name": "websk/php-keyvalue",
   "require": {
+    "php": "^7.4",
     "ext-mbstring": "*",
     "slim/slim": "^3.0",
     "websk/php-auth": "2.0.*",

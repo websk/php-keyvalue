@@ -50,10 +50,10 @@ class KeyValueService extends EntityService
     /**
      * @param string $key
      * @param string $value
-     * @param string|null $decription
+     * @param string|null $description
      * @throws \Exception
      */
-    public function setValueForKey(string $key, string $value, ?string $decription = null): void
+    public function setValueForKey(string $key, string $value, ?string $description = null): void
     {
         $key_value_id = $this->repository->findIdByKey($key);
         $key_value_obj = new KeyValue();
@@ -62,8 +62,8 @@ class KeyValueService extends EntityService
             $key_value_obj = $this->getById($key_value_id);
         }
         $key_value_obj->setValue($value);
-        if (!is_null($decription)) {
-            $key_value_obj->setDescription($decription);
+        if (!is_null($description)) {
+            $key_value_obj->setDescription($description);
         }
 
         $this->save($key_value_obj);
@@ -72,56 +72,56 @@ class KeyValueService extends EntityService
      * @param string $key
      * @return string
      */
-    protected function getOptionalValueForKeyCacheKey(string $key)
+    protected function getOptionalValueForKeyCacheKey(string $key): string
     {
         return 'optional_value_for_key_' .  $key;
     }
 
     /**
-     * @param KeyValue|InterfaceEntity $key_value_obj
+     * @param KeyValue|InterfaceEntity $entity_obj
      */
-    public function beforeSave(InterfaceEntity $key_value_obj)
+    public function beforeSave(InterfaceEntity $entity_obj)
     {
-        if (is_null($key_value_obj->getId())) {
+        if (is_null($entity_obj->getId())) {
             return;
         }
 
         // Сбрасываем кеш перед сохранением объекта для старого значения имени ключа (если вдруг имя ключа поменяется)
-        $existing_key_value_obj = $this->getById($key_value_obj->getId());
+        $existing_key_value_obj = $this->getById($entity_obj->getId());
 
         $cache_key = $this->getOptionalValueForKeyCacheKey($existing_key_value_obj->getName());
         $this->cache_service->delete($cache_key);
     }
 
     /**
-     * @param KeyValue|InterfaceEntity $key_value_obj
+     * @param KeyValue|InterfaceEntity $entity_obj
      */
-    public function afterSave(InterfaceEntity $key_value_obj)
+    public function afterSave(InterfaceEntity $entity_obj)
     {
-        parent::afterSave($key_value_obj);
+        parent::afterSave($entity_obj);
 
-        $cache_key = $this->getOptionalValueForKeyCacheKey($key_value_obj->getName());
+        $cache_key = $this->getOptionalValueForKeyCacheKey($entity_obj->getName());
         $this->cache_service->delete($cache_key);
 
         Logger::logObjectEvent(
-            $key_value_obj,
+            $entity_obj,
             'save',
             FullObjectId::getFullObjectId(Auth::getCurrentUserObj())
         );
     }
 
     /**
-     * @param KeyValue|InterfaceEntity $key_value_obj
+     * @param KeyValue|InterfaceEntity $entity_obj
      */
-    public function afterDelete(InterfaceEntity $key_value_obj)
+    public function afterDelete(InterfaceEntity $entity_obj)
     {
-        parent::afterDelete($key_value_obj);
+        parent::afterDelete($entity_obj);
 
-        $cache_key = $this->getOptionalValueForKeyCacheKey($key_value_obj->getName());
+        $cache_key = $this->getOptionalValueForKeyCacheKey($entity_obj->getName());
         $this->cache_service->delete($cache_key);
 
         Logger::logObjectEvent(
-            $key_value_obj,
+            $entity_obj,
             'delete',
             FullObjectId::getFullObjectId(Auth::getCurrentUserObj())
         );

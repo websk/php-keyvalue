@@ -41,6 +41,7 @@ class KeyValueListHandler extends BaseHandler
                 new KeyValue(),
                 [
                     new CRUDFormRow('Название', new CRUDFormWidgetInput(KeyValue::_NAME, false, true)),
+                    new CRUDFormRow('Описание', new CRUDFormWidgetInput(KeyValue::_DESCRIPTION)),
                     new CRUDFormRow('Значение', new CRUDFormWidgetTextarea(KeyValue::_VALUE))
                 ]
             ),
@@ -74,11 +75,11 @@ class KeyValueListHandler extends BaseHandler
         $layout_dto->setContentHtml($crud_table_obj->html($request));
 
         $breadcrumbs_arr = [
-            new BreadcrumbItemDTO('Главная', KeyValueConfig::getSkifMainPageUrl()),
+            new BreadcrumbItemDTO('Главная', KeyValueConfig::getMainPageUrl()),
 
         ];
         $layout_dto->setBreadcrumbsDtoArr($breadcrumbs_arr);
 
-        return PhpRender::renderLayout($response, KeyValueConfig::getSkifLayout(), $layout_dto);
+        return PhpRender::renderLayout($response, KeyValueConfig::getLayout(), $layout_dto);
     }
 }

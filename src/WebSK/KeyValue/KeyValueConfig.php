@@ -6,7 +6,7 @@ use WebSK\Config\ConfWrapper;
 
 /**
  * Class KeyValueConfig
- * @package WebSK\Auth
+ * @package WebSK\KeyValue
  */
 class KeyValueConfig
 {
@@ -14,9 +14,9 @@ class KeyValueConfig
     /**
      * @return string
      */
-    public static function getMainLayout(): string
+    public static function getLayout(): string
     {
-        return ConfWrapper::value('keyvalue.layout_main', ConfWrapper::value('layout.main'));
+        return ConfWrapper::value('keyvalue.layout',  ConfWrapper::value('layout.admin'));
     }
 
     /**
@@ -24,22 +24,6 @@ class KeyValueConfig
      */
     public static function getMainPageUrl(): string
     {
-        return ConfWrapper::value('keyvalue.main_page_url', '/');
-    }
-
-    /**
-     * @return string
-     */
-    public static function getSkifLayout(): string
-    {
-        return ConfWrapper::value('keyvalue.layout_skif', ConfWrapper::value('skif.layout'));
-    }
-
-    /**
-     * @return string
-     */
-    public static function getSkifMainPageUrl(): string
-    {
-        return ConfWrapper::value('keyvalue.skif_main_page_url', '/admin');
+        return ConfWrapper::value('keyvalue.main_page_url',  '');
     }
 }
