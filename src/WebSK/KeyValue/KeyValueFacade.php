@@ -18,6 +18,6 @@ class KeyValueFacade extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return KeyValue::ENTITY_SERVICE_CONTAINER_ID;
+        return KeyValueService::class;
     }
 }

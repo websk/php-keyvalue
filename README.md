@@ -6,9 +6,9 @@
 ## Demo
 * copy config/config.default.php as config/config.php
 * replace settings and paths
+* composer install
 * create MySQL DB db_keyvalue (or other) 
-* load in MySQL DB db_keyvalue dump.sql
-* composer update
+* process migration in MySQL DB: `php vendor\bin\websk_db_migration.php migrations:migration_auto`
 * cd public
 * php -S localhost:8000
 * open http://localhost:8000

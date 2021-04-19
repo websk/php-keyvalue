@@ -14,6 +14,7 @@ use WebSK\DB\DBWrapper;
 use WebSK\KeyValue\KeyValueConfig;
 use WebSK\KeyValue\KeyValueRoutes;
 use WebSK\KeyValue\KeyValueServiceProvider;
+use WebSK\KeyValue\RequestHandlers\KeyValueListHandler;
 use WebSK\Logger\LoggerRoutes;
 use WebSK\Logger\LoggerServiceProvider;
 use WebSK\Slim\Facade;
@@ -54,11 +55,11 @@ class KeyValueDemoApp extends App
 
         // Demo routing. Redirects
         $this->get('/', function (Request $request, Response $response) {
-            return $response->withRedirect(Router::pathFor(KeyValueRoutes::ROUTE_NAME_ADMIN_KEYVALUE_LIST));
+            return $response->withRedirect(Router::pathFor(KeyValueListHandler::class));
         });
 
         $this->get(KeyValueConfig::getAdminMainPageUrl(), function (Request $request, Response $response) {
-            return $response->withRedirect(Router::pathFor(KeyValueRoutes::ROUTE_NAME_ADMIN_KEYVALUE_LIST));
+            return $response->withRedirect(Router::pathFor(KeyValueListHandler::class));
         });
 
         $this->group(KeyValueConfig::getAdminMainPageUrl(), function (App $app) {

@@ -20,11 +20,13 @@ class KeyValueRepository extends EntityRepository
         $db_table_name = $this->getTableName();
         $db_id_field_name = $this->getIdFieldName();
 
-        return $this->db_service->readField(
+        $id = $this->db_service->readField(
             'SELECT ' . Sanitize::sanitizeSqlColumnName($db_id_field_name)
             . ' FROM ' . Sanitize::sanitizeSqlColumnName($db_table_name)
             . ' WHERE ' . Sanitize::sanitizeSqlColumnName(KeyValue::_NAME) . '=?',
             [$key]
         );
+
+        return ($id === false) ? null : $id;
     }
 }

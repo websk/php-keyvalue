@@ -6,7 +6,6 @@ use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use WebSK\KeyValue\KeyValueConfig;
-use WebSK\KeyValue\KeyValueRoutes;
 use WebSK\Slim\RequestHandlers\BaseHandler;
 use WebSK\Views\LayoutDTO;
 use WebSK\Views\BreadcrumbItemDTO;
@@ -51,7 +50,7 @@ class KeyValueListHandler extends BaseHandler
                     new CRUDTableWidgetTextWithLink(
                         KeyValue::_NAME,
                         function (KeyValue $key_value) {
-                            return $this->pathFor(KeyValueRoutes::ROUTE_NAME_ADMIN_KEYVALUE_EDIT, ['keyvalue_id' => $key_value->getId()]);
+                            return $this->pathFor(KeyValueEditHandler::class, ['keyvalue_id' => $key_value->getId()]);
                         }
                     )
                 ),

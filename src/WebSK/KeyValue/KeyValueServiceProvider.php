@@ -4,9 +4,8 @@ namespace WebSK\KeyValue;
 
 use Psr\Container\ContainerInterface;
 use WebSK\Cache\CacheServiceProvider;
-use WebSK\DB\DBConnectorMySQL;
 use WebSK\DB\DBService;
-use WebSK\DB\DBSettings;
+use WebSK\DB\DBServiceFactory;
 
 /**
  * Class KeyValueServiceProvider
@@ -14,6 +13,7 @@ use WebSK\DB\DBSettings;
  */
 class KeyValueServiceProvider
 {
+    const DUMP_FILE_PATH = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'dumps' . DIRECTORY_SEPARATOR . 'db_keyvalue.sql';
     const DB_SERVICE_CONTAINER_ID = 'keyvalue.db_service';
     const DB_ID = 'db_keyvalue';
 
@@ -22,15 +22,15 @@ class KeyValueServiceProvider
      */
     public static function register(ContainerInterface $container)
     {
-        $container[KeyValue::ENTITY_SERVICE_CONTAINER_ID] = function (ContainerInterface $container) {
+        $container[KeyValueService::class] = function (ContainerInterface $container) {
             return new KeyValueService(
                 KeyValue::class,
-                $container->get(KeyValue::ENTITY_REPOSITORY_CONTAINER_ID),
+                $container->get(KeyValueRepository::class),
                 CacheServiceProvider::getCacheService($container)
             );
         };
 
-        $container[KeyValue::ENTITY_REPOSITORY_CONTAINER_ID] = function (ContainerInterface $container) {
+        $container[KeyValueRepository::class] = function (ContainerInterface $container) {
             return new KeyValueRepository(
                 KeyValue::class,
                 $container->get(self::DB_SERVICE_CONTAINER_ID)
@@ -44,18 +44,7 @@ class KeyValueServiceProvider
         $container[self::DB_SERVICE_CONTAINER_ID] = function (ContainerInterface $container) {
             $db_config = $container['settings']['db'][self::DB_ID];
 
-            $db_connector = new DBConnectorMySQL(
-                $db_config['host'],
-                $db_config['db_name'],
-                $db_config['user'],
-                $db_config['password']
-            );
-
-            $db_settings = new DBSettings(
-                'mysql'
-            );
-
-            return new DBService($db_connector, $db_settings);
+            return DBServiceFactory::factoryMySQL($db_config);
         };
     }
 
@@ -65,7 +54,7 @@ class KeyValueServiceProvider
      */
     public static function getKeyValueService(ContainerInterface $container): KeyValueService
     {
-        return $container[KeyValue::ENTITY_SERVICE_CONTAINER_ID];
+        return $container->get(KeyValueService::class);
     }
 
     /**
@@ -74,6 +63,6 @@ class KeyValueServiceProvider
      */
     public static function getDbService(ContainerInterface $container): DBService
     {
-        return $container[self::DB_SERVICE_CONTAINER_ID];
+        return $container->get(self::DB_SERVICE_CONTAINER_ID);
     }
 }

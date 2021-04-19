@@ -6,7 +6,6 @@ use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use WebSK\KeyValue\KeyValueConfig;
-use WebSK\KeyValue\KeyValueRoutes;
 use WebSK\Views\LayoutDTO;
 use WebSK\Slim\RequestHandlers\BaseHandler;
 use WebSK\Utils\HTTP;
@@ -60,13 +59,13 @@ class KeyValueEditHandler extends BaseHandler
         $layout_dto->setContentHtml($crud_table_obj->html());
 
         $layout_dto->setNavTabsDtoArr([
-            new NavTabItemDTO('Редактирование', $this->pathFor(KeyValueRoutes::ROUTE_NAME_ADMIN_KEYVALUE_EDIT, ['keyvalue_id' => $keyvalue_id])),
+            new NavTabItemDTO('Редактирование', $this->pathFor(KeyValueEditHandler::class, ['keyvalue_id' => $keyvalue_id])),
             new NavTabItemDTO('Журнал', LoggerRender::getLoggerLinkForEntityObj($keyvalue_obj), '_blank'),
         ]);
 
         $layout_dto->setBreadcrumbsDtoArr([
             new BreadcrumbItemDTO('Главная', KeyValueConfig::getAdminMainPageUrl()),
-            new BreadcrumbItemDTO('Параметры', $this->pathFor(KeyValueRoutes::ROUTE_NAME_ADMIN_KEYVALUE_LIST))
+            new BreadcrumbItemDTO('Параметры', $this->pathFor(KeyValueListHandler::class))
         ]);
 
         return PhpRender::renderLayout($response, KeyValueConfig::getAdminLayout(), $layout_dto);

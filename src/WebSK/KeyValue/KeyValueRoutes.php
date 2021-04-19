@@ -13,8 +13,6 @@ use WebSK\KeyValue\RequestHandlers\KeyValueListHandler;
  */
 class KeyValueRoutes
 {
-    const ROUTE_NAME_ADMIN_KEYVALUE_LIST = 'admin:keyvalue:list';
-    const ROUTE_NAME_ADMIN_KEYVALUE_EDIT = 'admin:keyvalue:edit';
 
     /**
      * @param App $app
@@ -23,10 +21,10 @@ class KeyValueRoutes
     {
         $app->group('/keyvalue', function (App $app) {
             $app->map([HTTP::METHOD_GET, HTTP::METHOD_POST], '', KeyValueListHandler::class)
-                ->setName(self::ROUTE_NAME_ADMIN_KEYVALUE_LIST);
+                ->setName(KeyValueListHandler::class);
 
             $app->map([HTTP::METHOD_GET, HTTP::METHOD_POST], '/{keyvalue_id:\d+}', KeyValueEditHandler::class)
-                ->setName(self::ROUTE_NAME_ADMIN_KEYVALUE_EDIT);
+                ->setName(KeyValueEditHandler::class);
         });
     }
 }

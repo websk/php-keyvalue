@@ -19,6 +19,7 @@ return [
                 'db_name' => 'keyvalue',
                 'user' => 'root',
                 'password' => 'root',
+                'dump_file_path' => \WebSK\KeyValue\KeyValueServiceProvider::DUMP_FILE_PATH
             ],
             'db_auth' => [
                 'host' => 'localhost',
@@ -31,6 +32,7 @@ return [
                 'db_name' => 'logger',
                 'user' => 'root',
                 'password' => 'root',
+                'dump_file_path' => \WebSK\Logger\LoggerServiceProvider::DUMP_FILE_PATH
             ],
         ],
         'log_path' => '/var/www/log',
