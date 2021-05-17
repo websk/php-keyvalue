@@ -26,6 +26,7 @@ return [
                 'db_name' => 'auth',
                 'user' => 'root',
                 'password' => 'root',
+                'dump_file_path' => \WebSK\Auth\AuthServiceProvider::DUMP_FILE_PATH
             ],
             'db_logger' => [
                 'host' => 'localhost',
