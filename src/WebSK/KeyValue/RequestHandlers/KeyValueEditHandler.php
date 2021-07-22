@@ -3,8 +3,7 @@
 namespace WebSK\KeyValue\RequestHandlers;
 
 use Psr\Http\Message\ResponseInterface;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ServerRequestInterface;
 use WebSK\KeyValue\KeyValueConfig;
 use WebSK\Views\LayoutDTO;
 use WebSK\Slim\RequestHandlers\BaseHandler;
@@ -27,12 +26,12 @@ use WebSK\Views\PhpRender;
 class KeyValueEditHandler extends BaseHandler
 {
     /**
-     * @param Request $request
-     * @param Response $response
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
      * @param int $keyvalue_id
-     * @return ResponseInterface|Response
+     * @return ResponseInterface
      */
-    public function __invoke(Request $request, Response $response, int $keyvalue_id)
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, int $keyvalue_id)
     {
         $keyvalue_obj = KeyValueServiceProvider::getKeyValueService($this->container)->getById($keyvalue_id, false);
         if (!$keyvalue_obj) {
@@ -50,7 +49,7 @@ class KeyValueEditHandler extends BaseHandler
         );
 
         $crud_form_response = $crud_table_obj->processRequest($request, $response);
-        if ($crud_form_response instanceof Response) {
+        if ($crud_form_response instanceof ResponseInterface) {
             return $crud_form_response;
         }
 

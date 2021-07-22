@@ -2,10 +2,10 @@
 
 namespace WebSK\KeyValue\Demo;
 
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
 use Slim\Handlers\Strategies\RequestResponseArgs;
-use Slim\Http\Request;
-use Slim\Http\Response;
 use WebSK\Auth\AuthServiceProvider;
 use WebSK\Auth\User\UserServiceProvider;
 use WebSK\Cache\CacheServiceProvider;
@@ -54,11 +54,11 @@ class KeyValueDemoApp extends App
         };
 
         // Demo routing. Redirects
-        $this->get('/', function (Request $request, Response $response) {
+        $this->get('/', function (ServerRequestInterface $request, ResponseInterface $response) {
             return $response->withRedirect(Router::pathFor(KeyValueListHandler::class));
         });
 
-        $this->get(KeyValueConfig::getAdminMainPageUrl(), function (Request $request, Response $response) {
+        $this->get(KeyValueConfig::getAdminMainPageUrl(), function (ServerRequestInterface $request, ResponseInterface $response) {
             return $response->withRedirect(Router::pathFor(KeyValueListHandler::class));
         });
 
