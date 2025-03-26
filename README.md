@@ -1,5 +1,15 @@
 # WebSK php-keyvalue
 
+## Install
+
+https://packagist.org/packages/websk/php-keyvalue
+
+install dependency using Composer
+
+```shell
+composer require websk/php-keyvalue
+```
+
 ## Config example
 * config/config.default.php
 

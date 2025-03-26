@@ -4,11 +4,11 @@ namespace WebSK\KeyValue\RequestHandlers;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use WebSK\CRUD\CRUD;
 use WebSK\KeyValue\KeyValueConfig;
 use WebSK\Slim\RequestHandlers\BaseHandler;
 use WebSK\Views\LayoutDTO;
 use WebSK\Views\BreadcrumbItemDTO;
-use WebSK\CRUD\CRUDServiceProvider;
 use WebSK\CRUD\Form\CRUDFormRow;
 use WebSK\CRUD\Form\Widgets\CRUDFormWidgetInput;
 use WebSK\CRUD\Form\Widgets\CRUDFormWidgetTextarea;
@@ -25,6 +25,10 @@ use WebSK\Views\PhpRender;
  */
 class KeyValueListHandler extends BaseHandler
 {
+
+    /** @Inject */
+    protected CRUD $crud_service;
+
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
@@ -32,10 +36,10 @@ class KeyValueListHandler extends BaseHandler
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $crud_table_obj = CRUDServiceProvider::getCrud($this->container)->createTable(
+        $crud_table_obj = $this->crud_service->createTable(
             KeyValue::class,
-            CRUDServiceProvider::getCrud($this->container)->createForm(
-                'keyvalue_create_rand8476256485',
+            $this->crud_service->createForm(
+                'keyvalue_create',
                 new KeyValue(),
                 [
                     new CRUDFormRow('Название', new CRUDFormWidgetInput(KeyValue::_NAME, false, true)),
@@ -49,7 +53,7 @@ class KeyValueListHandler extends BaseHandler
                     new CRUDTableWidgetTextWithLink(
                         KeyValue::_NAME,
                         function (KeyValue $key_value) {
-                            return $this->pathFor(KeyValueEditHandler::class, ['keyvalue_id' => $key_value->getId()]);
+                            return $this->urlFor(KeyValueEditHandler::class, ['keyvalue_id' => $key_value->getId()]);
                         }
                     )
                 ),

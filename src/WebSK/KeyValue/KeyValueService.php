@@ -15,7 +15,7 @@ use WebSK\Utils\FullObjectId;
  */
 class KeyValueService extends EntityService
 {
-    const OPTIONAL_VALUES_CACHE_TTL_SEC = 60;
+    const int OPTIONAL_VALUES_CACHE_TTL_SEC = 60;
 
     /** @var KeyValueRepository */
     protected $repository;
@@ -80,7 +80,7 @@ class KeyValueService extends EntityService
     /**
      * @param KeyValue|InterfaceEntity $entity_obj
      */
-    public function beforeSave(InterfaceEntity $entity_obj)
+    public function beforeSave(InterfaceEntity $entity_obj): void
     {
         if (is_null($entity_obj->getId())) {
             return;
@@ -96,7 +96,7 @@ class KeyValueService extends EntityService
     /**
      * @param KeyValue|InterfaceEntity $entity_obj
      */
-    public function afterSave(InterfaceEntity $entity_obj)
+    public function afterSave(InterfaceEntity $entity_obj): void
     {
         parent::afterSave($entity_obj);
 
@@ -113,7 +113,7 @@ class KeyValueService extends EntityService
     /**
      * @param KeyValue|InterfaceEntity $entity_obj
      */
-    public function afterDelete(InterfaceEntity $entity_obj)
+    public function afterDelete(InterfaceEntity $entity_obj): void
     {
         parent::afterDelete($entity_obj);
 

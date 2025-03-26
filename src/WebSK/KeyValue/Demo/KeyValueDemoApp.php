@@ -2,22 +2,26 @@
 
 namespace WebSK\KeyValue\Demo;
 
+use Fig\Http\Message\StatusCodeInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
-use Slim\Handlers\Strategies\RequestResponseArgs;
+use Slim\Handlers\ErrorHandler;
+use Slim\Interfaces\InvocationStrategyInterface;
+use Slim\Interfaces\RouteCollectorProxyInterface;
+use Slim\Interfaces\RouteParserInterface;
+use Slim\Psr7\Factory\ResponseFactory;
 use WebSK\Auth\AuthServiceProvider;
 use WebSK\Auth\User\UserServiceProvider;
 use WebSK\Cache\CacheServiceProvider;
 use WebSK\CRUD\CRUDServiceProvider;
-use WebSK\DB\DBWrapper;
 use WebSK\KeyValue\KeyValueConfig;
 use WebSK\KeyValue\KeyValueRoutes;
 use WebSK\KeyValue\KeyValueServiceProvider;
 use WebSK\KeyValue\RequestHandlers\KeyValueListHandler;
 use WebSK\Logger\LoggerRoutes;
 use WebSK\Logger\LoggerServiceProvider;
-use WebSK\Slim\Facade;
 use WebSK\Slim\Router;
 
 /**
@@ -30,11 +34,11 @@ class KeyValueDemoApp extends App
      * LoggerDemoApp constructor.
      * @param array $config
      */
-    public function __construct($config = [])
+    public function __construct(ContainerInterface $container)
     {
-        parent::__construct($config);
+        parent::__construct(new ResponseFactory(), $container);
 
-        $container = $this->getContainer();
+        $this->registerRouterSettings($container);
 
         CacheServiceProvider::register($container);
         KeyValueServiceProvider::register($container);
@@ -44,33 +48,39 @@ class KeyValueDemoApp extends App
         LoggerServiceProvider::register($container);
 
         $this->registerRoutes();
+
+        $error_middleware = $this->addErrorMiddleware(true, true, true);
+        $error_middleware->setDefaultErrorHandler(ErrorHandler::class);
     }
 
-    protected function registerRoutes()
+    /**
+     * @param ContainerInterface $container
+     */
+    protected function registerRouterSettings(ContainerInterface $container): void
     {
-        $container = $this->getContainer();
-        $container['foundHandler'] = function () {
-            return new RequestResponseArgs();
-        };
+        $route_collector = $this->getRouteCollector();
+        $route_collector->setDefaultInvocationStrategy($container->get(InvocationStrategyInterface::class));
+        $route_parser = $route_collector->getRouteParser();
 
+        $container->set(RouteParserInterface::class, $route_parser);
+    }
+
+    protected function registerRoutes(): void
+    {
         // Demo routing. Redirects
         $this->get('/', function (ServerRequestInterface $request, ResponseInterface $response) {
-            return $response->withRedirect(Router::pathFor(KeyValueListHandler::class));
+            return $response->withHeader('Location', Router::urlFor(KeyValueListHandler::class))
+                ->withStatus(StatusCodeInterface::STATUS_FOUND);
         });
 
         $this->get(KeyValueConfig::getAdminMainPageUrl(), function (ServerRequestInterface $request, ResponseInterface $response) {
-            return $response->withRedirect(Router::pathFor(KeyValueListHandler::class));
+            return $response->withHeader('Location', Router::urlFor(KeyValueListHandler::class))
+                ->withStatus(StatusCodeInterface::STATUS_FOUND);
         });
 
-        $this->group(KeyValueConfig::getAdminMainPageUrl(), function (App $app) {
-            KeyValueRoutes::registerAdmin($app);
-            LoggerRoutes::registerAdmin($app);
+        $this->group(KeyValueConfig::getAdminMainPageUrl(), function (RouteCollectorProxyInterface $route_collector_proxy) {
+            KeyValueRoutes::registerAdmin($route_collector_proxy);
+            LoggerRoutes::registerAdmin($route_collector_proxy);
         });
-
-        /** Use facade */
-        Facade::setFacadeApplication($this);
-
-        /** Set DBWrapper db service */
-        DBWrapper::setDbService(KeyValueServiceProvider::getDBService($container));
     }
 }

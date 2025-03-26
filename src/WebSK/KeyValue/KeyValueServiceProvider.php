@@ -13,9 +13,13 @@ use WebSK\DB\DBServiceFactory;
  */
 class KeyValueServiceProvider
 {
-    const DUMP_FILE_PATH = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'dumps' . DIRECTORY_SEPARATOR . 'db_keyvalue.sql';
-    const DB_SERVICE_CONTAINER_ID = 'keyvalue.db_service';
-    const DB_ID = 'db_keyvalue';
+    const string DUMP_FILE_PATH = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'dumps' . DIRECTORY_SEPARATOR . 'db_keyvalue.sql';
+    const string DB_SERVICE_CONTAINER_ID = 'keyvalue.db_service';
+    const string DB_ID = 'db_keyvalue';
+
+    const string SETTINGS_CONTAINER_ID = 'settings';
+    const string PARAM_DB = 'db';
+
 
     /**
      * @param ContainerInterface $container
@@ -26,7 +30,7 @@ class KeyValueServiceProvider
             return new KeyValueService(
                 KeyValue::class,
                 $container->get(KeyValueRepository::class),
-                CacheServiceProvider::getCacheService($container)
+                $container->get(CacheServiceProvider::SERVICE_CONTAINER_ID)
             );
         };
 
@@ -42,27 +46,11 @@ class KeyValueServiceProvider
          * @return DBService
          */
         $container[self::DB_SERVICE_CONTAINER_ID] = function (ContainerInterface $container) {
-            $db_config = $container['settings']['db'][self::DB_ID];
+            $db_config = $container->get(
+                self::SETTINGS_CONTAINER_ID . '.' . self::PARAM_DB . '.' . self::DB_ID
+            );
 
             return DBServiceFactory::factoryMySQL($db_config);
         };
-    }
-
-    /**
-     * @param ContainerInterface $container
-     * @return KeyValueService
-     */
-    public static function getKeyValueService(ContainerInterface $container): KeyValueService
-    {
-        return $container->get(KeyValueService::class);
-    }
-
-    /**
-     * @param ContainerInterface $container
-     * @return DBService
-     */
-    public static function getDbService(ContainerInterface $container): DBService
-    {
-        return $container->get(self::DB_SERVICE_CONTAINER_ID);
     }
 }

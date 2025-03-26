@@ -10,15 +10,15 @@ use WebSK\Entity\Entity;
  */
 class KeyValue extends Entity
 {
-    const DB_TABLE_NAME = 'key_value';
+    const string DB_TABLE_NAME = 'key_value';
 
-    const _NAME = 'name';
+    const string _NAME = 'name';
     protected string $name;
 
-    const _DESCRIPTION = 'description';
+    const string _DESCRIPTION = 'description';
     protected string $description = '';
 
-    const _VALUE = 'value';
+    const string _VALUE = 'value';
     protected string $value = '';
 
     /**
