@@ -26,31 +26,31 @@ class KeyValueServiceProvider
      */
     public static function register(ContainerInterface $container)
     {
-        $container[KeyValueService::class] = function (ContainerInterface $container) {
+        $container->set(KeyValueService::class, function (ContainerInterface $container) {
             return new KeyValueService(
                 KeyValue::class,
                 $container->get(KeyValueRepository::class),
                 $container->get(CacheServiceProvider::SERVICE_CONTAINER_ID)
             );
-        };
+        });
 
-        $container[KeyValueRepository::class] = function (ContainerInterface $container) {
+        $container->set(KeyValueRepository::class, function (ContainerInterface $container) {
             return new KeyValueRepository(
                 KeyValue::class,
                 $container->get(self::DB_SERVICE_CONTAINER_ID)
             );
-        };
+        });
 
         /**
          * @param ContainerInterface $container
          * @return DBService
          */
-        $container[self::DB_SERVICE_CONTAINER_ID] = function (ContainerInterface $container) {
+        $container->set(self::DB_SERVICE_CONTAINER_ID, function (ContainerInterface $container) {
             $db_config = $container->get(
                 self::SETTINGS_CONTAINER_ID . '.' . self::PARAM_DB . '.' . self::DB_ID
             );
 
             return DBServiceFactory::factoryMySQL($db_config);
-        };
+        });
     }
 }
