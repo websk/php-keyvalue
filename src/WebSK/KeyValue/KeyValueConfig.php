@@ -10,20 +10,36 @@ use WebSK\Config\ConfWrapper;
  */
 class KeyValueConfig
 {
-
-    /**
-     * @return string
-     */
     public static function getAdminLayout(): string
     {
-        return ConfWrapper::value('keyvalue.layout_admin',  ConfWrapper::value('layout.admin'));
+        return self::stringValue(
+            'keyvalue.layout_admin',
+            self::stringValue('layout.admin', '')
+        );
     }
 
-    /**
-     * @return string
-     */
     public static function getAdminMainPageUrl(): string
     {
-        return ConfWrapper::value('keyvalue.admin_main_page_url',  '/admin');
+        return self::stringValue('keyvalue.admin_main_page_url', '/admin');
+    }
+
+    public static function getSiteName(): string
+    {
+        return self::stringValue('site_name', '');
+    }
+
+    public static function getSiteTitle(): string
+    {
+        return self::stringValue('site_title', '');
+    }
+
+    private static function stringValue(string $path, string $default): string
+    {
+        $value = ConfWrapper::value($path, $default);
+        if (!is_string($value)) {
+            throw new \UnexpectedValueException('Configuration value "' . $path . '" must be a string.');
+        }
+
+        return $value;
     }
 }

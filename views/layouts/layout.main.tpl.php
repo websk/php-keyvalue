@@ -3,11 +3,9 @@
  * @var LayoutDTO $layout_dto
  */
 
-use WebSK\Utils\Assert;
 use WebSK\Utils\Messages;
-use WebSK\Config\ConfWrapper;
+use WebSK\KeyValue\KeyValueConfig;
 use WebSK\Utils\Sanitize;
-use WebSK\Views\BreadcrumbItemDTO;
 use WebSK\Views\LayoutDTO;
 use WebSK\Utils\Url;
 ?>
@@ -17,7 +15,7 @@ use WebSK\Utils\Url;
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    <title><?= $layout_dto->getTitle() ?></title>
+    <title><?= Sanitize::sanitizeTagContent($layout_dto->getTitle()) ?></title>
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
@@ -49,7 +47,7 @@ use WebSK\Utils\Url;
 
 <div id="html">
     <div id="header" class="row">
-        <div style="font-size: 22px;"><?php echo  ConfWrapper::value('site_title')?></div>
+        <div style="font-size: 22px;"><?= Sanitize::sanitizeTagContent(KeyValueConfig::getSiteTitle()) ?></div>
     </div>
 
     <div>
@@ -58,9 +56,10 @@ use WebSK\Utils\Url;
                 <ol class="breadcrumb">
                     <?php
                     foreach ($layout_dto->getBreadcrumbsDtoArr() as $breadcrumb_item_dto) {
-                        Assert::assert($breadcrumb_item_dto instanceof BreadcrumbItemDTO);
                         if (!$breadcrumb_item_dto->getUrl()) {
-                            echo '<li class="active">' . $breadcrumb_item_dto->getName() . '</li>';
+                            echo '<li class="active">'
+                                . Sanitize::sanitizeTagContent($breadcrumb_item_dto->getName())
+                                . '</li>';
                             continue;
                         }
 
@@ -74,7 +73,7 @@ use WebSK\Utils\Url;
 
                 if ($current_url_no_query != '/') {
                     ?>
-                    <h1><?php echo $layout_dto->getTitle(); ?></h1>
+                    <h1><?= Sanitize::sanitizeTagContent($layout_dto->getTitle()) ?></h1>
                     <hr class="hidden-xs hidden-sm">
                     <?php
                 }
@@ -90,7 +89,7 @@ use WebSK\Utils\Url;
                         foreach ($layout_dto->getNavTabsDtoArr() as $nav_tab_item_dto) {
                             ?>
                             <li role="presentation" <?php echo (strpos($current_url_no_query, $nav_tab_item_dto->getUrl()) !== false ? ' class="active"' : '') ?>>
-                                <a href="<?php echo $nav_tab_item_dto->getUrl(); ?>"><?php echo $nav_tab_item_dto->getName(); ?></a>
+                                <a href="<?= Sanitize::sanitizeUrl($nav_tab_item_dto->getUrl()) ?>"><?= Sanitize::sanitizeTagContent($nav_tab_item_dto->getName()) ?></a>
                             </li>
                             <?php
                         }
@@ -106,7 +105,7 @@ use WebSK\Utils\Url;
 
     <div id="footer" class="row">
         <div>
-            &copy; <?php echo ConfWrapper::value('site_name'); ?>, <?php echo date('Y'); ?>
+            &copy; <?= Sanitize::sanitizeTagContent(KeyValueConfig::getSiteName()) ?>, <?= date('Y') ?>
         </div>
     </div>
 </div>

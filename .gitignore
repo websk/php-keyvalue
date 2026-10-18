@@ -2,3 +2,6 @@
 vendor/
 config/config.php
 .ai
+.phpstan-cache/
+.phpunit.cache/
+*.zip

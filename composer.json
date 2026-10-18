@@ -1,22 +1,64 @@
 {
   "name": "websk/php-keyvalue",
   "description": "KeyValue",
+  "license": "MIT",
   "require": {
     "php": "^8.3",
     "ext-mbstring": "*",
-    "slim/slim": "4.14.*",
-    "websk/php-auth": "2.4.*",
-    "websk/php-config": "2.0.*",
-    "websk/php-crud": "2.3.*",
-    "websk/php-entity": "2.2.*",
-    "websk/php-logger": "2.1.*",
-    "websk/php-slim": "2.3.*",
-    "websk/php-utils": "2.1.*",
-    "websk/php-view": "2.3.*"
+    "ext-pdo": "*",
+    "ext-pdo_mysql": "*",
+    "fig/http-message-util": "^1.1",
+    "juliangut/slim-php-di": "^4.2",
+    "psr/container": "^2.0",
+    "psr/http-message": "^2.0",
+    "slim/psr7": "^1.8",
+    "slim/slim": "^4.15",
+    "websk/php-cache": "3.0.*",
+    "websk/php-config": "2.2.*",
+    "websk/php-crud": "3.0.*",
+    "websk/php-db": "3.0.*",
+    "websk/php-entity": "3.0.*",
+    "websk/php-logger": "3.0.*",
+    "websk/php-slim": "2.4.*",
+    "websk/php-utils": "3.0.*",
+    "websk/php-view": "3.1.*"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^2.3",
+    "phpunit/phpunit": "^12.5",
+    "websk/php-auth": "3.0.*"
   },
   "autoload": {
     "psr-4": {
-      "": "src/"
+      "WebSK\\": "src/WebSK/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "WebSK\\KeyValue\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "lint": "find src tests config public views -name '*.php' -print0 | xargs -0 -n1 php -d error_reporting=E_ALL -l",
+    "test": "php -d error_reporting=E_ALL vendor/bin/phpunit --exclude-group mysql",
+    "test:mysql": "php -d error_reporting=E_ALL vendor/bin/phpunit --group mysql",
+    "phpstan": "php -d error_reporting=E_ALL vendor/bin/phpstan analyse --no-progress --debug",
+    "check": [
+      "@lint",
+      "@test",
+      "@phpstan"
+    ]
+  },
+  "archive": {
+    "exclude": [
+      "/.ai",
+      "/.DS_Store",
+      "/.idea",
+      "/.phpstan-cache",
+      "/.phpunit.cache",
+      "/config/config.php",
+      "/vendor",
+      "/*.zip"
+    ]
   }
 }

@@ -11,10 +11,6 @@ use WebSK\Entity\EntityRepository;
  */
 class KeyValueRepository extends EntityRepository
 {
-    /**
-     * @param string $key
-     * @return int|null
-     */
     public function findIdByKey(string $key): ?int
     {
         $db_table_name = $this->getTableName();
@@ -27,6 +23,16 @@ class KeyValueRepository extends EntityRepository
             [$key]
         );
 
-        return ($id === false) ? null : $id;
+        if ($id === false) {
+            return null;
+        }
+        if (is_int($id)) {
+            return $id;
+        }
+        if (is_string($id) && preg_match('/^-?\\d+$/D', $id) === 1) {
+            return (int)$id;
+        }
+
+        throw new \UnexpectedValueException('KeyValue ID must be an integer or an integer string.');
     }
 }

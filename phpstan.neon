@@ -1,0 +1,9 @@
+parameters:
+    level: max
+    paths:
+        - src
+        - tests
+        - public
+        - config/config.default.php
+        - views
+    tmpDir: .phpstan-cache

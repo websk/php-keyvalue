@@ -26,7 +26,7 @@ use WebSK\Views\PhpRender;
 class KeyValueListHandler extends BaseHandler
 {
 
-    /** @Inject */
+    #[\DI\Attribute\Inject]
     protected CRUD $crud_service;
 
     /**
@@ -34,7 +34,7 @@ class KeyValueListHandler extends BaseHandler
      * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $crud_table_obj = $this->crud_service->createTable(
             KeyValue::class,
@@ -52,8 +52,16 @@ class KeyValueListHandler extends BaseHandler
                     'Название',
                     new CRUDTableWidgetTextWithLink(
                         KeyValue::_NAME,
-                        function (KeyValue $key_value) {
-                            return $this->urlFor(KeyValueEditHandler::class, ['keyvalue_id' => $key_value->getId()]);
+                        function (KeyValue $key_value): string {
+                            $key_value_id = $key_value->getId();
+                            if ($key_value_id === null) {
+                                throw new \LogicException('Cannot build an edit URL for an unsaved KeyValue.');
+                            }
+
+                            return $this->urlFor(
+                                KeyValueEditHandler::class,
+                                ['keyvalue_id' => (string)$key_value_id]
+                            );
                         }
                     )
                 ),

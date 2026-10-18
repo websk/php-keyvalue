@@ -25,10 +25,10 @@ use WebSK\Views\PhpRender;
  */
 class KeyValueEditHandler extends BaseHandler
 {
-    /** @Inject */
+    #[\DI\Attribute\Inject]
     protected KeyValueService $key_value_service;
 
-    /** @Inject */
+    #[\DI\Attribute\Inject]
     protected CRUD $crud_service;
 
     /**
@@ -37,7 +37,11 @@ class KeyValueEditHandler extends BaseHandler
      * @param int $keyvalue_id
      * @return ResponseInterface
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, int $keyvalue_id)
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        int $keyvalue_id
+    ): ResponseInterface
     {
         $keyvalue_obj = $this->key_value_service->getById($keyvalue_id, false);
         if (!$keyvalue_obj) {
@@ -64,7 +68,10 @@ class KeyValueEditHandler extends BaseHandler
         $layout_dto->setContentHtml($crud_table_obj->html());
 
         $layout_dto->setNavTabsDtoArr([
-            new NavTabItemDTO('Редактирование', $this->urlFor(KeyValueEditHandler::class, ['keyvalue_id' => $keyvalue_id])),
+            new NavTabItemDTO(
+                'Редактирование',
+                $this->urlFor(KeyValueEditHandler::class, ['keyvalue_id' => (string)$keyvalue_id])
+            ),
             new NavTabItemDTO('Журнал', LoggerRender::getLoggerLinkForEntityObj($keyvalue_obj), '_blank'),
         ]);
 
