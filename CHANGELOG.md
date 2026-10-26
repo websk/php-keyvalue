@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented in this file.
 
+## [4.0.0] - 2026-10-26
+
+- Updated WebSK CRUD, Logger, and Auth to 4.0.1 and PHPStan to 2.3.2.
+- Migrated the demo layout and deterministic frontend build to the Bootstrap 5 asset contract.
+- Added local CRUD, Logger, Diff2Html, Diff, Highlight.js, and source-map assets.
+- Added frontend layout regression coverage and a favicon for a clean browser console.
+- Kept the delete action in a compact, right-aligned table column.
+
 ## [3.0.0] - 2026-10-18
 
 - Added verified compatibility with PHP 8.5 while retaining PHP 8.3 and 8.4 support.

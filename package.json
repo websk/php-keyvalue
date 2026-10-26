@@ -1,0 +1,28 @@
+{
+  "name": "websk-php-keyvalue-demo",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25",
+    "npm": ">=11 <12"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "7.3.1",
+    "@popperjs/core": "2.11.8",
+    "blueimp-file-upload": "10.32.0",
+    "bootstrap": "5.3.8",
+    "diff": "8.0.3",
+    "diff2html": "3.4.56",
+    "highlight.js": "11.12.0",
+    "jquery": "3.7.1",
+    "jquery-ui": "1.14.2",
+    "jquery-validation": "1.22.1"
+  },
+  "scripts": {
+    "build": "node scripts/build-assets.mjs",
+    "check": "node scripts/build-assets.mjs --check",
+    "audit:production": "npm audit --omit=dev --audit-level=moderate",
+    "audit:high": "npm audit --audit-level=high"
+  },
+  "license": "MIT"
+}

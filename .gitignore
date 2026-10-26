@@ -1,5 +1,7 @@
 .idea/
 vendor/
+node_modules/
+public/assets/
 config/config.php
 .ai
 .phpstan-cache/

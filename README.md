@@ -10,6 +10,7 @@ Key/value settings storage for WebSK applications, with CRUD administration, cac
 - `ext-pdo_mysql`
 - MySQL or MariaDB
 - A cache backend supported by `websk/php-cache`
+- Node.js 24 and npm 11 when rebuilding the demo frontend assets
 
 ## Installation
 
@@ -85,7 +86,14 @@ You can also apply `dumps/db_keyvalue.sql` to a new database directly.
 1. Copy `config/config.default.php` to `config/config.php`.
 2. Adjust the database, cache, and absolute layout paths.
 3. Run the database migrations.
-4. Start the built-in server from the project root:
+4. Install and build the local frontend assets:
+
+```shell
+npm ci
+npm run build
+```
+
+5. Start the built-in server from the project root:
 
 ```shell
 php -S localhost:8000 -t public
@@ -100,6 +108,25 @@ Run the default verification suite:
 ```shell
 composer check
 ```
+
+Verify the deterministic Bootstrap 5 frontend assets:
+
+```shell
+npm ci
+npm run check
+npm run audit:production
+npm run audit:high
+```
+
+The demo uses Bootstrap 5.3.8 and serves browser dependencies from
+`public/assets/libraries`. The generated directory is ignored by Git and excluded from
+Composer archives; rebuild it after a clean checkout or dependency update.
+
+The build publishes the canonical `bootstrap.bundle.min.js`, a compatibility alias at
+`bootstrap.min.js`, both Bootstrap source maps, CRUD and Logger styles, and the local
+Diff2Html, Diff, and Highlight.js resources used by logger comparison pages. The asset
+check verifies that generated files match the lockfile, contain no server-side files,
+and do not reference missing source maps.
 
 MySQL integration tests are opt-in:
 

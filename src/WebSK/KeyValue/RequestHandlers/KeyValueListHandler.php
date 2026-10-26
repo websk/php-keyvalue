@@ -82,7 +82,9 @@ class KeyValueListHandler extends BaseHandler
 
         $layout_dto = new LayoutDTO();
         $layout_dto->setTitle('Параметры');
-        $layout_dto->setContentHtml($crud_table_obj->html($request));
+        $layout_dto->setContentHtml(
+            '<div class="keyvalue-list">' . $crud_table_obj->html($request) . '</div>'
+        );
 
         $breadcrumbs_arr = [
             new BreadcrumbItemDTO('Главная', KeyValueConfig::getAdminMainPageUrl()),
